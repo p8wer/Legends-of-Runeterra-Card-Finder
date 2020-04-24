@@ -1,0 +1,86 @@
+.buttonRegionFreljord {
+    background-color: #33ccff;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonRegionDemacia {
+    background-color: #ffff66;
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+.buttonRegionIonia {
+    background-color: #ff6666;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonRegionNoxus {
+    background-color: #cc3300;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonRegionPiltoverZaun {
+    background-color: #ffff99;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonRegionShadowIsles {
+    background-color: #339966;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonUnitsChampions {
+    background-color: #a6a6a6;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonAllSpells {
+    background-color: #a6a6a6;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonSlowSpells {
+    background-color: #e580ff;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonFastSpells {
+    background-color: #ffff66;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.buttonBurstSpells {
+    background-color: #00b8e6;
+    color: white;
+    text-shadow: 1px 1px black;
+    /* Green */
+}
+
+.form-check-label {
+    font-size: 16px;
+}
+/*
+
+.buttonRegion {
+  background-color: #4CAF50; /* Green */
+}
+
+*/
