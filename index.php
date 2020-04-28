@@ -180,11 +180,13 @@ function pre2()
 
                         $json = file_get_contents('lor_assets/data-en_us/en_us/data/card-en_us.json');
                         $array = json_decode($json, 1);
-
+                        
+                        /*
                         pre();
                         print_r($_GET);
                         pre2();
-
+                        */
+                        
                         $regionRef = $_GET["regionRef"];
                         $manaCost = $_GET["manaCost"];
                         $cost = $_GET["cost"];
