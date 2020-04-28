@@ -5,8 +5,8 @@ You can check it out at https://lormanasheet.000webhostapp.com
 
 Must TODO list:
 
-- Add Bilgewater Region when possible
-- Move from POST to GET for searches
+- Add Bilgewater Region when possible ✔
+- Move from POST to GET for searches ✔
 - Add multiple region selecting
 - Make Non Card Art search more appealing/readable
 - (Might take longer) Add Spell filter by speed (Burst, Fast, Slow)
