@@ -173,8 +173,6 @@
 
                     if (empty($_POST) == false) {
 
-                        include 'php/php.php';
-
                         if (empty($_POST["regionRef"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No region specificed.</div>';
                             exit();
@@ -212,13 +210,14 @@
 
 
                             for ($i = $cost; $i > 0; $i--) {
-
-                                $expected = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
+                                
+                                // Without this, the mana higher/less filter simply won't work and would just show dupes.
+                                $jsonFilter = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
                                 if (empty($_POST["cardRequest"])) {
-                                    foreach ($expected as $relevantData) :
+                                    foreach ($jsonFilter as $relevantData) :
 
                                         $message =
                                             '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
@@ -234,8 +233,8 @@
                                     endforeach;
                                 } else {
 
-                                    foreach ($expected as $urlFoto) :
-                                        echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='' style='width:25%;height:25%'>";
+                                    foreach ($jsonFilter as $relevantData) :
+                                        echo "<img src=" . $relevantData['assets'][0]['gameAbsolutePath'] . " alt=" . $relevantData['name'] . " class='' style='width:25%;height:25%'>";
                                     endforeach;
                                 }
                                 $cost--;
@@ -243,13 +242,14 @@
                         } else if ($manaCost == "manaHigherThan") {
 
                             for ($i = $cost; $i < 13; $i++) {
-
-                                $expected = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
+                                
+                                // Without this, the mana higher/less filter simply won't work and would just show dupes.
+                                $jsonFilter = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
                                 if (empty($_POST["cardRequest"])) {
-                                    foreach ($expected as $relevantData) :
+                                    foreach ($jsonFilter as $relevantData) :
 
                                         $message =
                                             '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
@@ -265,8 +265,8 @@
                                     endforeach;
                                 } else {
 
-                                    foreach ($expected as $urlFoto) :
-                                        echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='' style='width:25%;height:25%'>";
+                                    foreach ($jsonFilter as $relevantData) :
+                                        echo "<img src=" . $relevantData['assets'][0]['gameAbsolutePath'] . " alt=" . $relevantData['name'] . " class='' style='width:25%;height:25%'>";
                                     endforeach;
                                 }
                                 $cost++;
