@@ -30,27 +30,31 @@
                             <p class="h4">Region</p>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="freljord" value="Freljord">
-                                <label class="form-check-label" for="freljord"><img src="LoR/core-en_us/en_us/img/regions/icon-freljord.png" alt="Freljord Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="freljord"><img src="lor_assets/core-en_us/en_us/img/regions/icon-freljord.png" alt="Freljord Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="demacia" value="Demacia">
-                                <label class="form-check-label" for="demacia"><img src="LoR/core-en_us/en_us/img/regions/icon-demacia.png" alt="Demacia Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="demacia"><img src="lor_assets/core-en_us/en_us/img/regions/icon-demacia.png" alt="Demacia Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="ionia" value="Ionia">
-                                <label class="form-check-label" for="ionia"><img src="LoR/core-en_us/en_us/img/regions/icon-ionia.png" alt="Ionia Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="ionia"><img src="lor_assets/core-en_us/en_us/img/regions/icon-ionia.png" alt="Ionia Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="noxus" value="Noxus">
-                                <label class="form-check-label" for="noxus"><img src="LoR/core-en_us/en_us/img/regions/icon-noxus.png" alt="Noxus Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="noxus"><img src="lor_assets/core-en_us/en_us/img/regions/icon-noxus.png" alt="Noxus Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="pnz" value="PiltoverZaun">
-                                <label class="form-check-label" for="pnz"><img src="LoR/core-en_us/en_us/img/regions/icon-piltoverzaun.png" alt="PnZ Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="pnz"><img src="lor_assets/core-en_us/en_us/img/regions/icon-piltoverzaun.png" alt="PnZ Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="shadowisles" value="ShadowIsles">
-                                <label class="form-check-label" for="shadowisles"><img src="LoR/core-en_us/en_us/img/regions/icon-shadowisles.png" alt="Shadow Isles Icon" style="width:50%;height:50%;"></label>
+                                <label class="form-check-label" for="shadowisles"><img src="lor_assets/core-en_us/en_us/img/regions/icon-shadowisles.png" alt="Shadow Isles Icon" style="width:50%;height:50%;"></label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="regionRef" id="bilgewater" value="Bilgewater">
+                                <label class="form-check-label" for="bilgewater"><img src="lor_assets/core-en_us/en_us/img/regions/icon-bilgewater.png" alt="Shadow Isles Icon" style="width:50%;height:50%;"></label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="unknown" value="unknown" disabled>
@@ -169,6 +173,8 @@
 
                     if (empty($_POST) == false) {
 
+                        include 'php/php.php';
+
                         if (empty($_POST["regionRef"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No region specificed.</div>';
                             exit();
@@ -186,16 +192,14 @@
                             exit();
                         }
 
-
-                        $json = file_get_contents('LoR/set1-lite-en_us/en_us/data/set1-en_us.json');
-
+                        $json = file_get_contents('lor_assets/data-en_us/en_us/data/card-en_us.json');
                         $array = json_decode($json, 1);
+
                         $regionRef = $_POST["regionRef"];
                         $manaCost = $_POST["manaCost"];
                         $cost = $_POST["cost"];
                         $type = $_POST["type"];
-
-
+                        // $spellSpeedRef = $_POST["spellSpeedRef"];
 
                         if ($type == "Unit") {
                             print "<p> Units: </p>";
@@ -204,8 +208,6 @@
                             print "<p> Spells: </p>";
                         }
 
-                        // $spellSpeedRef = $_POST["spellSpeedRef"];
-                        echo '<p>';
                         if ($manaCost == "manaLowerThan") {
 
 
@@ -215,69 +217,57 @@
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
-                                if (empty($expected)) {
+                                if (empty($_POST["cardRequest"])) {
+                                    foreach ($expected as $relevantData) :
+
+                                        $message =
+                                            '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
+                                            ' Name: <b>' . $relevantData['name'] . '</b> <br>' .
+                                            (($relevantData['type'] == "Unit") ? " Attack: <span class='badge badge-warning'>" . $relevantData['attack'] . '</span>' : "") .
+                                            (empty($relevantData['health']) ? "" : " Health: <span class='badge badge-danger'>" . $relevantData['health'] . '</span>') .  '<br>' .
+                                            (($relevantData["supertype"] == "Champion" && empty($relevantData["descriptionRaw"])) ? "Level UP: " . $relevantData["levelupDescriptionRaw"] . '<br>' : "") .
+                                            (empty($relevantData["keywords"]) ? "" : "Keywords: <span class='font-weight-bold text-warning'>" . implode("<span class='text-white'>,</span> ", $relevantData["keywords"]) . '</span>' . '<br>') .
+                                            (empty($relevantData['descriptionRaw']) ? "" : $relevantData['descriptionRaw'] . '<br>') . '</span>' . '<br>';
+
+                                        echo $message;
+
+                                    endforeach;
                                 } else {
 
-                                    $arraysParsed = array_values($expected);
-
-                                    if (empty($_POST["cardRequest"])) {
-                                        foreach ($arraysParsed as $relevantData) :
-
-                                            $message =
-                                                '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
-                                                ' Name: <b>' . $relevantData['name'] . '</b> <br>' .
-                                                (($relevantData['type'] == "Unit") ? " Attack: <span class='badge badge-warning'>" . $relevantData['attack'] . '</span>' : "") .
-                                                (empty($relevantData['health']) ? "" : " Health: <span class='badge badge-danger'>" . $relevantData['health'] . '</span>') .  '<br>' .
-                                                (($relevantData["supertype"] == "Champion" && empty($relevantData["descriptionRaw"])) ? "Level UP: " . $relevantData["levelupDescriptionRaw"] . '<br>' : "") .
-                                                (empty($relevantData["keywords"]) ? "" : "Keywords: <span class='font-weight-bold text-warning'>" . implode("<span class='text-white'>,</span> ", $relevantData["keywords"]) . '</span>' . '<br>') .
-                                                (empty($relevantData['descriptionRaw']) ? "" : $relevantData['descriptionRaw'] . '<br>') . '</span>' . '<br>';
-
-                                            echo $message;
-
-                                        endforeach;
-                                    } else {
-
-                                        foreach ($arraysParsed as $urlFoto) :
-                                            echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='' style='width:25%;height:25%'>";
-                                        endforeach;
-                                    }
+                                    foreach ($expected as $urlFoto) :
+                                        echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='' style='width:25%;height:25%'>";
+                                    endforeach;
                                 }
                                 $cost--;
                             }
                         } else if ($manaCost == "manaHigherThan") {
 
-                            for ($i = ($_POST["cost"]); $i < 13; $i++) {
+                            for ($i = $cost; $i < 13; $i++) {
 
                                 $expected = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
-                                if (empty($expected)) {
+                                if (empty($_POST["cardRequest"])) {
+                                    foreach ($expected as $relevantData) :
+
+                                        $message =
+                                            '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
+                                            ' Name: <b>' . $relevantData['name'] . '</b> <br>' .
+                                            (($relevantData['type'] == "Unit") ? " Attack: <span class='badge badge-warning'>" . $relevantData['attack'] . '</span>' : "") .
+                                            (empty($relevantData['health']) ? "" : " Health: <span class='badge badge-danger'>" . $relevantData['health'] . '</span>') .  '<br>' .
+                                            (($relevantData["supertype"] == "Champion" && empty($relevantData["descriptionRaw"])) ? "Level UP: " . $relevantData["levelupDescriptionRaw"] . '<br>' : "") .
+                                            (empty($relevantData["keywords"]) ? "" : "Keywords: <span class='font-weight-bold text-warning'>" . implode("<span class='text-white'>,</span> ", $relevantData["keywords"]) . '</span>' . '<br>') .
+                                            (empty($relevantData['descriptionRaw']) ? "" : $relevantData['descriptionRaw'] . '<br>') . '</span>' . '<br>';
+
+                                        echo $message;
+
+                                    endforeach;
                                 } else {
 
-                                    $arraysParsed = array_values($expected);
-
-                                    if (empty($_POST["cardRequest"])) {
-                                        foreach ($arraysParsed as $relevantData) :
-
-                                            $message =
-                                                '<span> Mana: <span class="badge badge-primary">' . $relevantData['cost'] . '</span>' .
-                                                ' Name: <b>' . $relevantData['name'] . '</b> <br>' .
-                                                (($relevantData['type'] == "Unit") ? " Attack: <span class='badge badge-warning'>" . $relevantData['attack'] . '</span>' : "") .
-                                                (empty($relevantData['health']) ? "" : " Health: <span class='badge badge-danger'>" . $relevantData['health'] . '</span>') .  '<br>' .
-                                                (($relevantData["supertype"] == "Champion" && empty($relevantData["descriptionRaw"])) ? "Level UP: " . $relevantData["levelupDescriptionRaw"] . '<br>' : "") .
-                                                (empty($relevantData["keywords"]) ? "" : "Keywords: <span class='font-weight-bold text-warning'>" . implode("<span class='text-white'>,</span> ", $relevantData["keywords"]) . '</span>' . '<br>') .
-                                                (empty($relevantData['descriptionRaw']) ? "" : $relevantData['descriptionRaw'] . '<br>') . '</span>' . '<br>';
-
-                                            echo $message;
-
-                                        endforeach;
-                                    } else {
-
-                                        foreach ($arraysParsed as $urlFoto) :
-                                            echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='img-fluid' style='width:25%;height:25%'>";
-                                        endforeach;
-                                    }
+                                    foreach ($expected as $urlFoto) :
+                                        echo "<img src=" . $urlFoto['assets'][0]['gameAbsolutePath'] . " alt='' class='' style='width:25%;height:25%'>";
+                                    endforeach;
                                 }
                                 $cost++;
                             }
@@ -285,7 +275,6 @@
                     } else {
                         echo "No data was searched for (at least so far!).";
                     }
-                    echo '</p>';
                     ?>
                 </div>
             </div>
