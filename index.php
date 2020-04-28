@@ -205,6 +205,8 @@
                         if ($type == "Spell") {
                             print "<p> Spells: </p>";
                         }
+                        
+                        echo "<p>";
 
                         if ($manaCost == "manaLowerThan") {
 
@@ -272,6 +274,9 @@
                                 $cost++;
                             }
                         }
+                        
+                        echo "</p>";
+                        
                     } else {
                         echo "No data was searched for (at least so far!).";
                     }
