@@ -1,3 +1,15 @@
+<?php
+//i hate typing echo pre ok
+function pre()
+{
+    echo "<pre class='text-light'>";
+}
+function pre2()
+{
+    echo "</pre>";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,22 +24,22 @@
 </head>
 
 <!-- author: sunset904 @ github -->
-<!-- CREDITS to this madlad at stackoverflow https://stackoverflow.com/a/53572076 for the JSON parsing  -->
+<!-- CREDITS to this madlad at stackoverflow https://stackoverflow.com/a/53572076 for the JSON parsing via array_filter function  -->
 
 <body class="bg-dark text-white container-fluid my-1">
 
     <main>
         <div class="container">
-            <h1 class="text-left h3">LoR Mana Cheatsheet Finder <span class="h6">by <a href="https://github.com/sunset904">sunset904 @ github</a></span></h1>
+            <h1 class="text-left h3"><a href="." class="text-light">LoR Mana Cheatsheet Finder</a> <span class="h6">by <a href="https://github.com/sunset904">sunset904 @ github</a></span></h1>
 
-            <form action="<?php /*echo $_SERVER['PHP_SELF'];*/ ?>" method="post" enctype="multipart/form-data">
+            <form action="<?php ?>" method="get" enctype="multipart/form-data">
 
-                <!--<form action="processing_filter.php" method="post" enctype="multipart/form-data"> -->
                 <div class="container-fluid my-3">
 
                     <div class="row my-3">
                         <div class="col">
                             <p class="h4">Region</p>
+
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="regionRef" id="freljord" value="Freljord">
                                 <label class="form-check-label" for="freljord"><img src="lor_assets/core-en_us/en_us/img/regions/icon-freljord.png" alt="Freljord Icon" style="width:50%;height:50%;"></label>
@@ -75,12 +87,6 @@
                                 <label class="form-check-label btn btn-light" for="manaLowerThan">Equal or Lower than</label>
                             </div>
                             <hr>
-                            <!-- 
-                        <div class="form-check form-check-inline py-2">
-                            <input class="form-check-input" type="radio" name="cost" id="manaValue0" value="0">
-                            <label class="form-check-label btn btn-primary" for="manaValue0">0</label>
-                        </div>
-                         -->
                             <div class="form-check form-check-inline py-2">
                                 <input class="form-check-input" type="radio" name="cost" id="manaValue1" value="1">
                                 <label class="form-check-label btn btn-primary" for="manaValue1">1</label>
@@ -109,24 +115,6 @@
                                 <input class="form-check-input" type="radio" name="cost" id="manaValue7" value="7">
                                 <label class="form-check-label btn btn-primary" for="manaValue7">7</label>
                             </div>
-                            <!-- 
-                        <div class="form-check form-check-inline py-2">
-                            <input class="form-check-input" type="radio" name="cost" id="manaValue8" value="8">
-                            <label class="form-check-label btn btn-primary" for="manaValue8">8</label>
-                        </div>
-                        <div class="form-check form-check-inline py-2">
-                            <input class="form-check-input" type="radio" name="cost" id="manaValue9" value="9">
-                            <label class="form-check-label btn btn-primary" for="manaValue9">9</label>
-                        </div>
-                        <div class="form-check form-check-inline py-2">
-                            <input class="form-check-input" type="radio" name="cost" id="manaValue10" value="10">
-                            <label class="form-check-label btn btn-primary" for="manaValue10">10</label>
-                        </div>
-                        <div class="form-check form-check-inline py-2">
-                            <input class="form-check-input" type="radio" name="cost" id="manaValue11" value="11">
-                            <label class="form-check-label btn btn-primary" for="manaValue11">10+</label>
-                        </div>
-                         -->
                         </div>
                         <div class="col">
                             <p class="h4">Card Type</p>
@@ -152,9 +140,9 @@
                             <input class="form-check-input" type="radio" name="spellSpeedRef" id="burstspells" value="Burst">
                             <label class="form-check-label btn buttonBurstSpells" for="burstspells">BURST Spells</label>
                         </div>
- -->
+                             -->
                             <div class="form-check form-check-inline py-2">
-                                <input class="form-check-input" type="radio" name="cardRequest" id="cardRequest" value="cardArtRequest">
+                                <input class="form-check-input" type="radio" name="cardRequest" id="cardRequest" value="true">
                                 <label class="form-check-label btn btn-light" for="cardRequest">Use Card Art instead of text?</label>
                             </div>
                         </div>
@@ -171,21 +159,21 @@
                 <div class="col">
                     <?php
 
-                    if (empty($_POST) == false) {
+                    if (empty($_GET) == false) {
 
-                        if (empty($_POST["regionRef"])) {
+                        if (empty($_GET["regionRef"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No region specificed.</div>';
                             exit();
                         }
-                        if (empty($_POST["manaCost"])) {
+                        if (empty($_GET["manaCost"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No mana depth specificed.</div>';
                             exit();
                         }
-                        if (empty($_POST["cost"])) {
+                        if (empty($_GET["cost"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No mana cost specificed.</div>';
                             exit();
                         }
-                        if (empty($_POST["type"])) {
+                        if (empty($_GET["type"])) {
                             print '<div class="alert alert-danger" role="alert">ERROR: No card type specificed.</div>';
                             exit();
                         }
@@ -193,11 +181,15 @@
                         $json = file_get_contents('lor_assets/data-en_us/en_us/data/card-en_us.json');
                         $array = json_decode($json, 1);
 
-                        $regionRef = $_POST["regionRef"];
-                        $manaCost = $_POST["manaCost"];
-                        $cost = $_POST["cost"];
-                        $type = $_POST["type"];
-                        // $spellSpeedRef = $_POST["spellSpeedRef"];
+                        pre();
+                        print_r($_GET);
+                        pre2();
+
+                        $regionRef = $_GET["regionRef"];
+                        $manaCost = $_GET["manaCost"];
+                        $cost = $_GET["cost"];
+                        $type = $_GET["type"];
+                        // $spellSpeedRef = $_GET["spellSpeedRef"];
 
                         if ($type == "Unit") {
                             print "<p> Units: </p>";
@@ -205,20 +197,21 @@
                         if ($type == "Spell") {
                             print "<p> Spells: </p>";
                         }
-                        
+
                         echo "<p>";
 
                         if ($manaCost == "manaLowerThan") {
 
 
                             for ($i = $cost; $i > 0; $i--) {
-                                
+
                                 // Without this, the mana higher/less filter simply won't work and would just show dupes.
                                 $jsonFilter = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
-                                if (empty($_POST["cardRequest"])) {
+
+                                if (empty($_GET["cardRequest"])) {
                                     foreach ($jsonFilter as $relevantData) :
 
                                         $message =
@@ -239,18 +232,20 @@
                                         echo "<img src=" . $relevantData['assets'][0]['gameAbsolutePath'] . " alt=" . $relevantData['name'] . " class='' style='width:25%;height:25%'>";
                                     endforeach;
                                 }
+
                                 $cost--;
                             }
                         } else if ($manaCost == "manaHigherThan") {
 
                             for ($i = $cost; $i < 13; $i++) {
-                                
+
                                 // Without this, the mana higher/less filter simply won't work and would just show dupes.
                                 $jsonFilter = array_filter($array, function ($var) use ($regionRef, $cost, $type /*, $spellSpeedRef */) {
                                     return ($var['regionRef'] == $regionRef && $var['cost'] == $cost && ($var['type'] == $type /* || $var['spellSpeedRef'] == $spellSpeedRef */));
                                 });
 
-                                if (empty($_POST["cardRequest"])) {
+
+                                if (empty($_GET["cardRequest"])) {
                                     foreach ($jsonFilter as $relevantData) :
 
                                         $message =
@@ -274,10 +269,14 @@
                                 $cost++;
                             }
                         }
-                        
+
                         echo "</p>";
-                        
                     } else {
+                        /*
+                        pre();
+                        print_r($_GET);
+                        pre2();
+                        */
                         echo "No data was searched for (at least so far!).";
                     }
                     ?>
